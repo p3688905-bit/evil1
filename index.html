@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>人性善惡之辯思辨小學堂 - 移動端 UI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FAF8F2',
+                            100: '#F4ECD8',
+                            200: '#E7D5AA',
+                            300: '#D5BD8D',
+                        },
+                        mint: {
+                            50: '#F0FDF4',
+                            100: '#DCFCE7',
+                            200: '#BBF7D0',
+                            500: '#22C55E',
+                            600: '#16A34A',
+                            700: '#15803D',
+                        },
+                        amberGold: {
+                            100: '#FFFDF0',
+                            200: '#FFF5C2',
+                            500: '#E99B3C',
+                            600: '#D97706',
+                        },
+                        riverBlue: {
+                            100: '#EEF6FB',
+                            200: '#D1E6F5',
+                            500: '#4A90E2',
+                            600: '#357ABD',
+                        }
+                    },
+                    borderRadius: {
+                        'xl-cute': '1.25rem',
+                        '2xl-cute': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', 'Kosugi Maru', sans-serif;
+            background-color: #F4EFE6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 滾動條美化 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #BBF7D0;
+            border-radius: 10px;
+        }
+
+        /* 可愛澎澎陰影效果 */
+        .bubble-shadow {
+            box-shadow: 0 8px 0px 0px #D3C19C;
+        }
+        .btn-bubble {
+            box-shadow: 0 4px 0px 0px rgba(0,0,0,0.1);
+            transition: all 0.1s ease;
+        }
+        .btn-bubble:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0px 0px rgba(0,0,0,0.1);
+        }
+        
+        /* 浮動雲朵與嫩芽萌發動畫 */
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-5px) translateX(3px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+        .floating-cloud {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes sprout-grow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(34,197,94,0.3)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(34,197,94,0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(34,197,94,0.3)); }
+        }
+        .glowing-sprout {
+            animation: sprout-grow 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- 手機模擬容器 -->
+    <div class="relative w-full max-w-md h-[844px] sm:h-[812px] bg-cream-50 sm:rounded-[40px] shadow-2xl overflow-hidden border-8 border-amber-955/20 flex flex-col">
+        
+        <!-- 模擬頂部狀態列 -->
+        <div class="px-6 pt-3 pb-2 flex justify-between items-center text-xs text-amber-955/40 select-none">
+            <span class="font-bold">15:30 💧 孟 🆚 告 🌱</span>
+            <div class="flex items-center space-x-1.5">
+                <span>四端智能 5G</span>
+                <span>100%🔋</span>
+            </div>
+        </div>
+
+        <!-- 頂部導航標題 -->
+        <header class="px-5 py-3 bg-cream-100 border-b-2 border-cream-200 flex items-center justify-between relative">
+            <div class="flex items-center space-x-2">
+                <!-- 嫩芽 Logo -->
+                <div class="w-10 h-10 bg-mint-500 rounded-full flex items-center justify-center text-white text-xl shadow-inner font-black glowing-sprout">
+                    🌱
+                </div>
+                <div>
+                    <h1 class="text-base font-black text-amber-955 tracking-wide">人性善惡之辯小學堂</h1>
+                    <p class="text-[10px] text-amber-900/70 font-bold flex items-center">
+                        <span class="inline-block w-2 h-2 rounded-full bg-mint-500 mr-1 animate-pulse"></span>
+                        當前單元：孟子·告子上
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 可愛問號按鈕 -->
+            <button onclick="toggleHelpModal(true)" class="w-9 h-9 bg-mint-100 hover:bg-mint-200 border-2 border-mint-500/20 text-mint-700 rounded-full flex items-center justify-center font-bold text-lg btn-bubble">
+                ？
+            </button>
+            
+            <!-- 漂浮背景小雲朵 -->
+            <div class="absolute right-16 top-1 floating-cloud opacity-25 pointer-events-none">
+                <svg class="w-8 h-5 text-mint-500 fill-current" viewBox="0 0 24 16"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+            </div>
+        </header>
+
+        <!-- 主要內容滾動區 -->
+        <main class="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20 relative">
+            
+            <!-- ================= TAB 1: 結構樹 ================= -->
+            <div id="page-structure" class="space-y-4 page-content">
+                <div class="bg-mint-50 rounded-2xl-cute p-4 border-2 border-mint-200 relative overflow-hidden">
+                    <span class="text-[10px] bg-mint-500 text-white font-bold px-2 py-0.5 rounded-full">倫理學與人性論</span>
+                    <h2 class="text-base font-black text-amber-955 mt-2">尋找心中的「向善引力」💧</h2>
+                    <p class="text-xs text-amber-900/80 mt-1 leading-relaxed">告子認為人性就如亂流的湍水，朝東朝西完全取決於外在渠道；孟子則認為人性本具道德趨光性，就像水往低處流一樣自然。點擊展開看這場經典思想碰撞的辯論結構：</p>
+                </div>
+
+                <!-- 邏輯結構樹 -->
+                <div class="space-y-3 relative pl-3 border-l-2 border-dashed border-mint-500/30">
+                    
+                    <!-- 核心命題 -->
+                    <div class="relative">
+                        <div class="absolute -left-[19px] top-5 w-2.5 h-2.5 rounded-full bg-mint-500 border-2 border-cream-50"></div>
+                        <div onclick="toggleCard('card-topic')" class="bg-white hover:bg-cream-100/50 p-3.5 rounded-xl-cute border-2 border-amber-955/10 cursor-pointer shadow-sm transition-all">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-mint-700 bg-mint-100 px-2 py-0.5 rounded">🎯 核心命題</span>
+                                <span id="card-topic-icon" class="text-xs text-amber-955/40">展開 ▾</span>
+                            </div>
+                            <p class="text-sm font-black text-amber-955 mt-1.5">人是否有先天的「道德趨向性」？</p>
+                            <div id="card-topic-detail" class="hidden mt-3 pt-2.5 border-t border-dashed border-amber-955/10 text-xs text-amber-900/80 leading-relaxed">
+                                <strong>探索本質：</strong><br>
+                                告子主張「人性無分於善不善」（中性論），強調後天塑造；孟子主張「人性之善，猶水之就下也」（本善論），強調先天道德萌芽（四端）的自我擴充。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 前提一：告子的湍水說 -->
+                    <div class="relative">
+                        <div class="absolute -left-[19px] top-5 w-2.5 h-2.5 rounded-full bg-riverBlue-500 border-2 border-cream-50"></div>
+                        <div onclick="toggleCard('card-premise1')" class="bg-white hover:bg-cream-100/50 p-3.5 rounded-xl-cute border-2 border-amber-955/10 cursor-pointer shadow-sm transition-all">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-riverBlue-600 bg-riverBlue-100 px-2 py-0.5 rounded">💡 前提一：告子「外鑠與無向性」</span>
+                                <span id="card-premise1-icon" class="text-xs text-amber-955/40">展開 ▾</span>
+                            </div>
+                            <p class="text-sm font-black text-amber-955 mt-1.5">「性猶湍水，決東則東流，決西則西流」</p>
+                            <div id="card-premise1-detail" class="hidden mt-3 pt-2.5 border-t border-dashed border-amber-955/10 text-xs text-amber-900/80 leading-relaxed">
+                                <strong>環境塑性：</strong><br>
+                                告子認為人像是一汪無定規的水，善惡純粹是後天社會規範（決諸東方/西方）和制度教育所塑造成的，人性本質毫無自發的道德指向。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 前提二：孟子的本善就下說 -->
+                    <div class="relative">
+                        <div class="absolute -left-[19px] top-5 w-2.5 h-2.5 rounded-full bg-mint-600 border-2 border-cream-50"></div>
+                        <div onclick="toggleCard('card-premise2')" class="bg-white hover:bg-cream-100/50 p-3.5 rounded-xl-cute border-2 border-amber-955/10 cursor-pointer shadow-sm transition-all">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-mint-750 bg-mint-100 px-2 py-0.5 rounded">💡 前提二：孟子「內生與就下性」</span>
+                                <span id="card-premise2-icon" class="text-xs text-amber-955/40">展開 ▾</span>
+                            </div>
+                            <p class="text-sm font-black text-amber-955 mt-1.5">「人性之善也，猶水之就下也」</p>
+                            <div id="card-premise2-detail" class="hidden mt-3 pt-2.5 border-t border-dashed border-amber-955/10 text-xs text-amber-900/80 leading-relaxed">
+                                <strong>向善重力：</strong><br>
+                                孟子精妙駁斥：水固然不分東西，但「難道不分上下嗎？」人往善處走，就像水往低處流一樣，是刻在生命本能底層的先天趨向（人無有不善，水無有不下）。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 邏輯交鋒：外力扭曲 vs 本性表現 -->
+                    <div class="relative">
+                        <div class="absolute -left-[19px] top-5 w-2.5 h-2.5 rounded-full bg-amberGold-500 border-2 border-cream-50"></div>
+                        <div onclick="toggleCard('card-evidence')" class="bg-white hover:bg-cream-100/50 p-3.5 rounded-xl-cute border-2 border-amber-955/10 cursor-pointer shadow-sm transition-all">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-amberGold-600 bg-amberGold-100 px-2 py-0.5 rounded">⚔️ 辯論交鋒：勢與性的分野</span>
+                                <span id="card-evidence-icon" class="text-xs text-amber-955/40">展開 ▾</span>
+                            </div>
+                            <p class="text-sm font-black text-amber-955 mt-1.5">「搏而躍之，可使過顙」➔ 這是「勢」而非「性」</p>
+                            <div id="card-evidence-detail" class="hidden mt-3 pt-2.5 border-t border-dashed border-amber-955/10 text-xs text-amber-900/80 leading-relaxed">
+                                <strong>環境扭曲理論：</strong><br>
+                                孟子指出，拍打水可以讓水飛濺到額頭（過顙），阻擋水可以把它引上山，但這並非水的「本性」，而是外在力學條件（勢）迫使的結果。人會作惡，同樣是因為後天惡劣環境的威逼利誘（其勢則然），並非其本性就是惡。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 最終結論：四端自我覺察 -->
+                    <div class="relative">
+                        <div class="absolute -left-[19px] top-5 w-2.5 h-2.5 rounded-full bg-emerald-600 border-2 border-cream-50"></div>
+                        <div onclick="toggleCard('card-conclusion')" class="bg-white hover:bg-cream-100/50 p-3.5 rounded-xl-cute border-2 border-amber-955/10 cursor-pointer shadow-sm transition-all">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">🏁 最終思辨啟示</span>
+                                <span id="card-conclusion-icon" class="text-xs text-amber-955/40">展開 ▾</span>
+                            </div>
+                            <p class="text-sm font-black text-amber-955 mt-1.5">惡是善端的迷失，要「求其放心」！</p>
+                            <div id="card-conclusion-detail" class="hidden mt-3 pt-2.5 border-t border-dashed border-amber-955/10 text-xs text-amber-900/80 leading-relaxed">
+                                <strong>自我實踐：</strong><br>
+                                既然人先天具有惻隱（仁）、羞惡（義）、辭讓（禮）、是非（智）四個善的萌芽（四端），那麼教育和修養的本質就不該是「強行塞入後天道德」，而是像保護、澆灌幼苗一樣，守護這顆心，並把不小心走丟、沉淪的本心重新找回來（求其放心）。
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ================= TAB 2: 思辨核心 ================= -->
+            <div id="page-core" class="hidden space-y-4 page-content">
+                
+                <!-- 人性本善與水流向模型圖 -->
+                <div class="bg-mint-50 p-4 rounded-2xl-cute border-2 border-mint-200">
+                    <h3 class="text-xs font-bold text-mint-700 tracking-wider text-center uppercase mb-3.5">🌱 人性傾向與流向物理模型</h3>
+                    
+                    <div class="flex flex-col items-center space-y-2">
+                        <!-- 告子模型 -->
+                        <div class="bg-white border-2 border-amber-950/10 p-3 rounded-xl-cute text-center max-w-[280px] w-full shadow-sm">
+                            <div class="text-[9px] text-riverBlue-500 font-bold block">💧 告子：湍水無向模型 (Neutral Nature)</div>
+                            <span class="text-xs font-black text-amber-955">水只分東西，不分上下。</span>
+                            <div class="flex justify-around text-[10px] font-bold mt-1.5">
+                                <span class="bg-riverBlue-100 px-1.5 py-0.5 rounded text-riverBlue-700">引導至東 ➔ 變善 🌱</span>
+                                <span class="bg-red-50 px-1.5 py-0.5 rounded text-red-600">引導至西 ➔ 變惡 🥀</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 邏輯駁斥箭頭 -->
+                        <div class="flex items-center space-x-1 justify-center py-1">
+                            <div class="h-0.5 w-10 bg-mint-500"></div>
+                            <span class="text-[9px] text-mint-600 font-extrabold uppercase">孟子精妙反駁 ⚡</span>
+                            <div class="h-0.5 w-10 bg-mint-500"></div>
+                        </div>
+
+                        <!-- 孟子模型 -->
+                        <div class="bg-white border-2 border-amber-950/10 p-3 rounded-xl-cute text-center max-w-[280px] w-full shadow-sm">
+                            <div class="text-[9px] text-mint-600 font-bold block">🍀 孟子：重力就下模型 (Directional Nature)</div>
+                            <span class="text-xs font-black text-amber-955">水信無分東西，無分上下乎？</span>
+                            <div class="text-[10px] font-semibold text-left space-y-1 mt-2 px-1">
+                                <div class="flex justify-between items-center"><span class="text-mint-700 font-bold">● 水之就下 (向低處)</span> <span class="text-mint-600">＝ 人之就善 🌱</span></div>
+                                <div class="flex justify-between items-center"><span class="text-amber-600 font-bold">● 搏躍過顙 (外力壓迫)</span> <span class="text-amber-500">＝ 環境致惡 🥀</span></div>
+                            </div>
+                        </div>
+
+                        <!-- 結論核心 -->
+                        <div class="bg-mint-600 text-white px-4 py-2.5 rounded-xl-cute text-center max-w-[280px] w-full shadow-sm mt-1 font-bold">
+                            <span class="text-[9px] text-mint-100 block">🔒 人性先天定錨</span>
+                            <span class="text-xs">人無有不善，水無有不下！</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 經典古文互動閱讀器 -->
+                <div class="bg-white rounded-2xl-cute border-2 border-amber-950/10 p-4 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] bg-mint-100 text-mint-700 font-bold px-2 py-0.5 rounded">📜 《孟子·告子上》選段</span>
+                        <span class="text-[10px] text-amber-900/50 font-bold">💡 點擊虛線字看白話與剖析</span>
+                    </div>
+
+                    <!-- 古文原文 -->
+                    <div class="text-amber-955 text-sm leading-8 font-serif tracking-wide text-justify">
+                        告子曰：「性猶
+                        <span onclick="showTranslation('湍水', '急流、無固定方向的亂水。告子用此比喻人性初始狀態沒有道德善惡的預設偏好，完全取決於後天引導與河道（教育）的修築。')" class="underline decoration-wavy decoration-riverBlue-500 font-black cursor-pointer text-riverBlue-600 bg-riverBlue-100/35 px-1 rounded hover:bg-riverBlue-200">湍水</span>
+                        也，決諸東方則東流，決諸西方則西流。人性之無分於善不善也，猶水之無分於東西也。」<br>
+                        孟子曰：「水信無分於東西，無分於上下乎？人性之善也，猶
+                        <span onclick="showTranslation('水之就下', '水往低處流的本性。孟子以此反駁，認為人追求善良是內在與生俱來的趨光性和道德本能，就像水往低處流是地球引力的絕對自然法則一樣。')" class="underline decoration-wavy decoration-mint-500 font-black cursor-pointer text-mint-700 bg-mint-50 px-1 rounded hover:bg-mint-100">水之就下</span>
+                        也。人無有不善，水無有不下。<br>
+                        今夫水，
+                        <span onclick="showTranslation('搏而躍之', '拍打並使水飛濺。這代表了外部干擾。拍打水可以讓水高過額頭（過顙），阻擋並引導它，甚至可以引水上山，但這並非水「向低處流」的內在本性（其性），而是外力形勢逼迫造成的（其勢則然）。')" class="underline decoration-wavy decoration-amberGold-500 font-black cursor-pointer text-amberGold-600 bg-amberGold-100/35 px-1 rounded hover:bg-amberGold-200">搏而躍之</span>
+                        ，可使過顙；激而行之，可使在山。是豈水之性哉？其勢則然也。人之可使為不善，其性亦
+                        <span onclick="showTranslation('猶是', '也像這樣。孟子指出，人會做出自私、殘暴等惡行，是因為後天受到了社會壓力、利益誘惑或生存困境等外在重力（勢）的扭曲。本善的心靈被扭曲，但那絕非人類先天生來的本質特徵。')" class="underline decoration-wavy decoration-gray-500 font-black cursor-pointer text-gray-700 bg-gray-50 px-1 rounded hover:bg-gray-100">猶是</span>
+                        也。」
+                    </div>
+
+                    <!-- 互動翻譯解說面板 -->
+                    <div id="translation-card" class="hidden mt-4 p-3 bg-cream-100 border-2 border-dashed border-mint-500/30 rounded-xl-cute transition-all">
+                        <div class="flex justify-between items-center mb-1">
+                            <span id="trans-word" class="text-xs font-black text-mint-700">字詞：</span>
+                            <button onclick="closeTranslation()" class="text-xs text-amber-955/40 hover:text-amber-950">關閉 ✕</button>
+                        </div>
+                        <p id="trans-text" class="text-xs text-amber-900/80 leading-relaxed font-bold">載入中...</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= TAB 3: 思辨工具 ================= -->
+            <div id="page-tools" class="hidden space-y-4 page-content">
+                
+                <!-- 邏輯謬誤檢測機 -->
+                <div class="bg-white rounded-2xl-cute border-2 border-amber-950/10 p-4 shadow-sm">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="text-xl">🤖</span>
+                        <h3 class="text-sm font-black text-amber-955">人性論認知與邏輯謬誤檢測</h3>
+                    </div>
+                    <p class="text-xs text-amber-900/60 mb-3">我們在理解「人性」和「道德」時，也常陷入不當類比與認知盲點。點擊下方進行診斷：</p>
+                    
+                    <!-- 謬誤選項 -->
+                    <div class="space-y-2">
+                        <button onclick="detectFallacy(1)" class="w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-mint-100/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 flex justify-between items-center transition-all">
+                            <span>💬 「人性就是一張白紙，後天填鴨進去什麼，他就會變成什麼樣的人，先天根本沒有任何善惡底線。」</span>
+                            <span class="text-amber-900/50">分析 ➔</span>
+                        </button>
+                        <button onclick="detectFallacy(2)" class="w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-mint-100/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 flex justify-between items-center transition-all">
+                            <span>💬 「社會上有那麼多人為了生存不擇手段、傷害他人，這就充分證明了人本性就是自私且邪惡的！」</span>
+                            <span class="text-amber-900/50">分析 ➔</span>
+                        </button>
+                        <button onclick="detectFallacy(3)" class="w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-mint-100/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 flex justify-between items-center transition-all">
+                            <span>💬 「杞柳可以被雕刻成精美的水杯。所以人性一定要通過嚴酷的外在懲罰與訓導，才能成為道德的人。」</span>
+                            <span class="text-amber-900/50">分析 ➔</span>
+                        </button>
+                    </div>
+
+                    <!-- 謬誤分析面板 -->
+                    <div id="fallacy-result" class="hidden mt-4 p-3.5 bg-mint-100 rounded-xl-cute border-2 border-mint-500/20">
+                        <h4 id="fallacy-title" class="text-xs font-black text-mint-700">檢測結果：</h4>
+                        <p id="fallacy-desc" class="text-xs text-amber-900/80 mt-1.5 leading-relaxed font-bold">說明...</p>
+                    </div>
+                </div>
+
+                <!-- 互動思辨挑戰賽 -->
+                <div class="bg-white rounded-2xl-cute border-2 border-amber-950/10 p-4 shadow-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl">🏆</span>
+                            <h3 class="text-sm font-black text-amber-955">孟子思想實驗大挑戰</h3>
+                        </div>
+                        <span class="text-[10px] bg-amberGold-200 text-amber-800 font-extrabold px-1.5 py-0.5 rounded-full">+15 積分</span>
+                    </div>
+                    
+                    <p class="text-xs font-bold text-amber-900 mb-3">【思辨題】孟子曾提出著名的「孺子入井」思想實驗（看到小嬰兒快掉進井裡，任何人皆會產生驚駭痛苦的同理心）。他用此論證的主要目的是什麼？</p>
+                    
+                    <!-- 選項 -->
+                    <div class="space-y-2">
+                        <button onclick="answerQuiz(this, false)" class="quiz-option w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-cream-200/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 transition-all">
+                            A) 勸說大眾在井口周圍必須安裝堅固的護欄，以避免兒童意外墜井受傷，展現古代的公共安全意識。
+                        </button>
+                        <button onclick="answerQuiz(this, true)" class="quiz-option w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-cream-200/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 transition-all">
+                            B) 證明「惻隱之心」是人人先天本具的善端。此時的拯救衝動既不是為了向鄉里討好，也不是為了博取名聲，而是本能不忍之心（同理心）的瞬間外顯。
+                        </button>
+                        <button onclick="answerQuiz(this, false)" class="quiz-option w-full text-left p-2.5 text-xs bg-cream-100 hover:bg-cream-200/50 border border-amber-955/10 rounded-lg font-bold text-amber-955 transition-all">
+                            C) 說明人類在危機關頭的腎上腺素激增，是一種為了種群基因延續而發展出的進化生物學防禦機制。
+                        </button>
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden mt-3 text-xs font-bold text-center"></div>
+                </div>
+
+            </div>
+
+            <!-- ================= TAB 4: 我的筆記 ================= -->
+            <div id="page-notes" class="hidden space-y-4 page-content">
+                
+                <!-- 筆記編輯器 -->
+                <div class="bg-white rounded-2xl-cute border-2 border-amber-950/10 p-4 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl">✍️</span>
+                            <h3 class="text-sm font-black text-amber-955">人性與修養思辨隨筆</h3>
+                        </div>
+                        <span class="text-[10px] text-amber-900/40">自動存檔</span>
+                    </div>
+
+                    <!-- 筆記可愛印章 -->
+                    <div class="flex space-x-2 mb-3">
+                        <span class="text-xs text-amber-900/60 self-center font-bold">蓋上印章:</span>
+                        <button onclick="addStamp('🌱 守護善端')" class="bg-mint-100 hover:bg-mint-200 text-mint-800 text-xs px-2.5 py-1 rounded-full font-bold btn-bubble">🌱 守護善端</button>
+                        <button onclick="addStamp('🧠 先天潛能')" class="bg-riverBlue-100 hover:bg-riverBlue-200 text-riverBlue-700 text-xs px-2.5 py-1 rounded-full font-bold btn-bubble">🧠 先天潛能</button>
+                    </div>
+
+                    <textarea id="note-input" rows="4" class="w-full p-3 bg-cream-100 border-2 border-dashed border-amber-955/20 rounded-xl-cute text-xs text-amber-955 focus:outline-none focus:border-mint-500 font-bold" placeholder="在此記下您對「孟子性善、人性趨向、後天扭曲與現代心理學」等當代現象的哲學思考啟迪吧..."></textarea>
+                    
+                    <button onclick="saveNote()" class="mt-3 w-full py-2.5 bg-mint-500 hover:bg-mint-600 text-white font-black text-xs rounded-xl-cute btn-bubble">
+                        寫入思辨檔案 💾
+                    </button>
+                </div>
+
+                <!-- 已存筆記列表 -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-black text-amber-900/80 px-1">🗂 歷史竹簡歸檔</h3>
+                    <div id="notes-list" class="space-y-2">
+                        <!-- 系統預設經典筆記 -->
+                        <div class="bg-amberGold-100 p-3.5 rounded-xl-cute border border-amberGold-200 relative overflow-hidden">
+                            <div class="absolute right-2 top-2 text-[10px] bg-amberGold-200 text-amber-900 px-1.5 py-0.5 rounded-full font-black">🌱 守護善端</div>
+                            <p class="text-xs text-amber-955 font-bold leading-relaxed mt-2">
+                                孟子的「性善論」常被誤解為天真的理想主義，但本質上它是極具前瞻性的認識論。孟子並非宣稱「人一出生就不會做壞事」，而是肯定人類擁有向善的「先天潛能與核心代碼（四端之心）」。現代發展心理學進行過著名的「嬰兒道德實驗」：當6個月大、尚未受到文字與文化社會化的嬰兒看到「互助」與「阻礙」的木偶表演時，絕大多數會本能選擇並親近互助的木偶，這有力佐證了人類先天的同理心和善端。在西方哲學中，這與盧梭在《愛彌兒》中主張的「自然善性」跨時空共鳴。作惡不是本性，而是環境的重力（勢）阻斷與扭曲了善的流動。因此，修養的本質不是「外在灌輸」，而是「不失其赤子之心」，求其放心而已！
+                            </p>
+                            <span class="block text-[10px] text-amber-900/40 mt-2">導師推薦筆記庫</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- 幫助說明彈窗 -->
+        <div id="help-modal" class="hidden absolute inset-0 bg-amber-955/40 backdrop-blur-sm z-30 flex justify-center items-center p-6">
+            <div class="bg-white w-full max-w-xs rounded-3xl-cute border-4 border-mint-200 p-5 shadow-2xl relative">
+                <button onclick="toggleHelpModal(false)" class="absolute right-4 top-4 w-7 h-7 bg-cream-100 text-amber-955 rounded-full font-bold text-xs flex items-center justify-center border hover:bg-cream-200">✕</button>
+                
+                <div class="text-center space-y-3 mt-2">
+                    <span class="text-4xl">🌱💧⚖️</span>
+                    <h3 class="text-base font-black text-amber-950">人性善惡之辯指南</h3>
+                    <p class="text-xs text-amber-800/80 leading-relaxed font-bold">
+                        歡迎來到倫理與心靈探索課！我們將透過這堂課，剖析歷史中最经典的「人性的本能重力」思想實驗：
+                    </p>
+                    <ul class="text-left text-xs text-amber-800/80 space-y-1.5 list-disc list-inside font-bold bg-cream-100 p-3 rounded-xl-cute border border-cream-200">
+                        <li>在「結構樹」中釐清環境塑性（湍水）與內生向善（就下）的思辨邊界</li>
+                        <li>點擊「告子上原文」看孟子如何以「勢」和「性」的力學概念絕地反擊</li>
+                        <li>用「邏輯謬誤」診斷當前對於「性惡」與「白紙論」過度化約的認知偏誤</li>
+                        <li>在挑戰賽中檢驗你的「同理心（惻隱之心）」邏輯推導</li>
+                    </ul>
+                    <button onclick="toggleHelpModal(false)" class="w-full py-2 bg-mint-500 hover:bg-mint-600 text-white font-black text-xs rounded-xl-cute btn-bubble">
+                        開啟智慧探索！
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自訂 Toast 提示框 -->
+        <div id="custom-toast" class="hidden absolute top-16 left-1/2 transform -translate-x-1/2 bg-amber-955/90 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg z-50 flex items-center space-x-1">
+            <span id="toast-icon">✨</span>
+            <span id="toast-msg">已儲存！</span>
+        </div>
+
+        <!-- 手機版底部導航列 -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t-2 border-cream-200 py-2.5 px-4 flex justify-around items-center z-20">
+            <!-- Tab 1: 結構 -->
+            <button onclick="switchTab('structure')" id="nav-structure" class="nav-btn flex flex-col items-center space-y-0.5 text-mint-500 font-black">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                <span class="text-[10px]">善惡結構</span>
+            </button>
+
+            <!-- Tab 2: 核心 -->
+            <button onclick="switchTab('core')" id="nav-core" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-955/40 font-bold hover:text-mint-500">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.1-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.35-.75-2-1zM3 18.5V7c1.1-.35 2.3-.5 3.5-.5 1.35 0 2.8.25 4 .75v11.5c-1.2-.5-2.65-.75-4-.75-1.2 0-2.4.15-3.5.5zm18 0c-1.1-.35-2.3-.5-3.5-.5-1.35 0-2.8.25-4 .75V7.25c1.2-.5 2.65-.75 4-.75 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
+                <span class="text-[10px]">告子原文</span>
+            </button>
+
+            <!-- Tab 3: 工具 -->
+            <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-955/40 font-bold hover:text-mint-500">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                <span class="text-[10px]">認知謬誤</span>
+            </button>
+
+            <!-- Tab 4: 筆記 -->
+            <button onclick="switchTab('notes')" id="nav-notes" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-955/40 font-bold hover:text-mint-500">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                <span class="text-[10px]">思辨筆記</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- 邏輯腳本處理 -->
+    <script>
+        // 1. Tab 切換功能
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(`page-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-mint-500', 'font-black');
+                btn.classList.add('text-amber-955/40', 'font-bold');
+            });
+            
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.remove('text-amber-955/40', 'font-bold');
+            activeNav.classList.add('text-mint-500', 'font-black');
+        }
+
+        // 2. 卡片摺疊面板
+        function toggleCard(cardId) {
+            const detail = document.getElementById(`${cardId}-detail`);
+            const icon = document.getElementById(`${cardId}-icon`);
+            if (detail.classList.contains('hidden')) {
+                detail.classList.remove('hidden');
+                icon.innerText = '收起 ▴';
+            } else {
+                detail.classList.add('hidden');
+                icon.innerText = '展開 ▾';
+            }
+        }
+
+        // 3. 古文解說卡片
+        function showTranslation(word, text) {
+            const card = document.getElementById('translation-card');
+            const transWord = document.getElementById('trans-word');
+            const transText = document.getElementById('trans-text');
+            
+            transWord.innerText = `💡 剖析：【${word}】`;
+            transText.innerText = text;
+            card.classList.remove('hidden');
+        }
+
+        // 關閉解說
+        function closeTranslation() {
+            document.getElementById('translation-card').classList.add('hidden');
+        }
+
+        // 4. 邏輯謬誤檢測機
+        function detectFallacy(type) {
+            const resultBox = document.getElementById('fallacy-result');
+            const title = document.getElementById('fallacy-title');
+            const desc = document.getElementById('fallacy-desc');
+
+            resultBox.classList.remove('hidden');
+
+            if (type === 1) {
+                title.innerText = '🤖 檢測結果：過度簡化的經驗主義謬誤 (Tabula Rasa Fallacy)';
+                desc.innerText = '這犯了白紙論的認知偏差。現代遺傳學與認知發展心理學早已指出，人類嬰兒在極早期就內嵌了「道德與正義的直覺代碼」，例如對互助行為的偏好和同理痛苦的心智模型（這就是孟子所言之四端萌芽）。人性並非無方向、完全可塑的「湍水」，而是本自具備了生命內在的良善演化重力。';
+            } else if (type === 2) {
+                title.innerText = '🤖 檢測結果：應然與實然的混淆 (Naturalistic Fallacy)';
+                desc.innerText = '這在倫理學上犯了將「當下發生的事實（實然）」等同於「人類先天本質（應然）」的歸因盲區。社會上有自私邪惡的行為，那是善的心靈在惡劣的外在環境中被「拍打、扭曲（勢）」產生的受損表現，而非人天生朝向惡。將受扭曲的結果直接等同於初始本質，即是混淆了「性」與「勢」的邊界。';
+            } else if (type === 3) {
+                title.innerText = '🤖 檢測結果：不當機械論與殘害生命的類比偏誤 (Violent Analogy Fallacy)';
+                desc.innerText = '這是孟子在《告子上》前半段痛斥告子的點。告子曾用「杞柳雕刻成杯盤（桮棬）」來比喻人被後天道德加工。孟子極其敏銳地指出：柳樹要被砍斷砍傷才能變成杯盤，若依告子逻辑，你要推行道德，豈不是要把人摧殘殘害、扼殺自發潛能才能建立？道德修養不該是機械灌輸，而是順應先天良知的生命自我滋養。';
+            }
+        }
+
+        // 5. 互動小挑戰
+        let quizAnswered = false;
+        function answerQuiz(btn, isCorrect) {
+            if (quizAnswered) return;
+
+            const feedback = document.getElementById('quiz-feedback');
+            
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.add('opacity-50');
+            });
+            btn.classList.remove('opacity-50');
+
+            if (isCorrect) {
+                btn.classList.remove('bg-cream-100');
+                btn.classList.add('bg-mint-200', 'border-mint-500');
+                feedback.innerHTML = '🎉 同理心推導完全正確！直抵核心！<br><span class="text-[11px] font-normal text-amber-900/80">「人皆有惻隱之心。」孟子透過「看見嬰兒入水」那一秒的無意識純粹動機，說明了人類內在「不忍人之心（同理心）」是跨越利弊考量、先於社會教化的最根本先天本質。拯救嬰兒的衝動並非是為了後天人際回報或趨利避害的理性博弈，而是善良本心（四端）的萌發。承認並持續擴充這顆赤子同理心，就是通往仁義道德的科學與實踐路徑。</span>';
+                feedback.className = 'mt-3 text-xs font-bold text-mint-750 block';
+                showToast('✨ 挑戰成功！獲得 15 積分！');
+            } else {
+                btn.classList.remove('bg-cream-100');
+                btn.classList.add('bg-red-100', 'border-red-400');
+                feedback.innerHTML = '❌ 哎呀，分析偏離了人性論的宏觀重點！<br><span class="text-[11px] font-normal text-amber-900/80">提示：從倫理學與心靈哲學的角度來看，真正的「孺子入井」並非物理學防禦或常規的安全常識，而是藉由「完全無利害關係」的當下拯救動機，去實證人性靈魂深處先天的同理善端。再想想。</span>';
+                feedback.className = 'mt-3 text-xs font-bold text-red-650 block';
+                showToast('😢 答錯了，請再想想！');
+            }
+            quizAnswered = true;
+        }
+
+        // 6. 蓋上筆記印章
+        function addStamp(stampText) {
+            const input = document.getElementById('note-input');
+            input.value = `[${stampText}] ` + input.value;
+            input.focus();
+            showToast(`已貼上「${stampText}」標籤！`);
+        }
+
+        // 7. 儲存筆記
+        function saveNote() {
+            const input = document.getElementById('note-input');
+            const text = input.value.trim();
+            if (!text) {
+                showToast('❌ 請寫一點內容再存檔喔！');
+                return;
+            }
+
+            const notesList = document.getElementById('notes-list');
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const bgClasses = ['bg-mint-100/60', 'bg-riverBlue-100/60', 'bg-amberGold-100'];
+            const randomBg = bgClasses[Math.floor(Math.random() * bgClasses.length)];
+
+            const noteNode = document.createElement('div');
+            noteNode.className = `${randomBg} p-3.5 rounded-xl-cute border border-amber-955/10 relative overflow-hidden transition-all duration-300`;
+            noteNode.innerHTML = `
+                <p class="text-xs text-amber-955 font-bold leading-relaxed">${text}</p>
+                <span class="block text-[10px] text-amber-900/40 mt-2">創建於 ${timeStr}</span>
+            `;
+
+            notesList.insertBefore(noteNode, notesList.firstChild);
+            input.value = '';
+            showToast('💾 筆記已寫入竹簡！');
+        }
+
+        // 8. 幫助視窗開關
+        function toggleHelpModal(show) {
+            const modal = document.getElementById('help-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // 9. 自訂彈窗提示 (Toast)
+        function showToast(message) {
+            const toast = document.getElementById('custom-toast');
+            const msgSpan = document.getElementById('toast-msg');
+            msgSpan.innerText = message;
+            
+            toast.classList.remove('hidden');
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
